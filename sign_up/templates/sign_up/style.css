@@ -1,0 +1,5 @@
+{% load staticfiles %}
+body{
+            background: url({% static "sign_up/back.png" %});
+            background-size: 100%;
+     }

@@ -1,0 +1,27 @@
+{% load staticfiles %}
+{% block content %}
+<head>
+    <meta charset="utf-8">
+    <title>CSS-правила</title>
+    <link rel="stylesheet" type="text/css" href="style.css" >
+    <style>
+      body{ background: url({% static "sign_up/back.png" %});
+            background-size: 100%;}
+    </style>
+  </head>
+<body>
+    <div>
+        <form method="post" action="{% url 'sign_up:register' %}">
+            <h1>SIGN UP WITH</h1>
+            {% csrf_token %}
+            {{ form.as_p }}
+                <p> By signing up, I agree to the PlacePass Terms of Service and Privace Policy</p>
+            <button name="submit">REGISTER</button>
+            <input type="hidden" name="next" value="{% url 'sign_up:index' %}" />
+            <p>Already have an account?</p>
+            <button name="submit">LOG IN</button>
+            <input type="hidden" name="next" value="{% url 'sign_up:login' %}" />
+        </form>
+    </div>
+</body>
+{% endblock content %}
