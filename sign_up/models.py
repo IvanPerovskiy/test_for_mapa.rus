@@ -1,19 +1,107 @@
 from django.db import models
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.utils import timezone
+from django.utils.translation import ugettext_lazy as _
+from django.core.mail import send_mail
 
-# Create your models here.
-class Topic(models.Model):
-    text = models.CharField(max_length=200)
-    date_added = models.DateTimeField(auto_now_add=True)
-    def __str__(self):
-        return self.text
+class MyUserManager(BaseUserManager):
 
-class Entry(models.Model):
+    use_in_migrations = True
 
-    topic = models.ForeignKey(Topic)
-    text = models.TextField()
-    date_added = models.DateTimeField(auto_now_add=True)
+    def _create_user(self, email, password, **extra_fields):
+        if not email:
+            raise ValueError('The given email must be set')
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_user(self, email, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', False)
+        extra_fields.setdefault('is_superuser', False)
+        return self._create_user(email, password, **extra_fields)
+
+    def create_superuser(self, email, password, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError('Superuser must have is_staff=True.')
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError('Superuser must have is_superuser=True.')
+        return self._create_user(email, password, **extra_fields)
+
+
+class MyUser(AbstractBaseUser,PermissionsMixin):
+    """PermissionsMixin contains the following fields:
+        - `is_superuser`
+        - `groups`
+        - `user_permissions`
+     You can omit this mix-in if you don't want to use permissions or
+     if you want to implement your own permissions logic.
+     """
+
     class Meta:
-        verbose_name_plural = 'entries'
-    def __str__(self):
-        return self.text[:50] + "..."
+        verbose_name = _("user")
+        verbose_name_plural = _("users")
+        swappable = 'AUTH_USER_MODEL'
+        # `db_table` is only needed if you move from the existing default
+        # User model to a custom one. This enables to keep the existing data.
 
+    USERNAME_FIELD = 'email'
+    """Use the email as unique username."""
+
+    REQUIRED_FIELDS = ['first_name', 'last_name']
+
+    email = models.EmailField(
+        verbose_name=_("email"), unique=True,
+        max_length=250,
+        error_messages={
+            'unique': _("A user with that username already exists."),
+        },
+    )
+
+    first_name = models.CharField(
+        max_length=30, verbose_name=_("first name"),
+    )
+    last_name = models.CharField(
+        max_length=30, verbose_name=_("last name"),
+    )
+    is_staff = models.BooleanField(
+        verbose_name=_("staff status"),
+        default=False,
+        help_text=_(
+            "Designates whether the user can log into this admin site."
+        ),
+    )
+    is_active = models.BooleanField(
+        verbose_name=_("active"),
+        default=True,
+        help_text=_(
+            "Designates whether this user should be treated as active. "
+            "Unselect this instead of deleting accounts."
+        ),
+    )
+    date_joined = models.DateTimeField(
+        verbose_name=_("date joined"), default=timezone.now,
+    )
+
+
+    objects = MyUserManager()
+
+
+    def get_full_name(self):
+        """
+        Return the first_name plus the last_name, with a space in between.
+        """
+        full_name = '%s %s' % (self.first_name, self.last_name)
+        return full_name.strip()
+
+    def get_short_name(self):
+        """Return the short name for the user."""
+        return self.first_name
+
+    def email_user(self, subject, message, from_email=None, **kwargs):
+        """Send an email to this user."""
+        send_mail(subject, message, from_email, [self.email], **kwargs)

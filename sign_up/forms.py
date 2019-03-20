@@ -1,38 +1,26 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Topic
+from .models import MyUser
 
-
-class SignUpForm(UserCreationForm):
-    email = forms.EmailField(max_length=254, help_text='Это поле обязательно')
-
-
-
-    class Meta:
-        model = User
-        fields = ('username', 'email', 'password1', 'password2', )
-
-
-class TopicForm(forms.ModelForm):
-    class Meta:
-        model = Topic
-        fields = ['text']
-        labels = {'text': ''}
 
 class LoginForm(forms.Form):
-    username = forms.CharField()
-    password = forms.CharField(widget=forms.PasswordInput)
+    email = forms.EmailField(label='', widget=forms.EmailInput(attrs={'placeholder': 'Email','class' : 'myfield'}), required=True)
+    password = forms.CharField(label='', widget=forms.PasswordInput(attrs={'placeholder': 'Password','class' : 'myfield'}), required=True)
 
 
 class UserRegistrationForm(UserCreationForm):
-    first_name = forms.CharField(label='First name')
-    last_name = forms.CharField(label='Last name')
-    email = forms.EmailField(label='Email', max_length=254, widget=forms.EmailInput)
-    #password = forms.CharField(label='sddsPassword', widget=forms.PasswordInput)
-    password2 = forms.CharField(label='Confirm password', widget=forms.PasswordInput)
+    first_name = forms.CharField(label='',widget=forms.TextInput(attrs={'placeholder': 'First name', 'class' : 'myfield'}))
+    last_name = forms.CharField(label='',widget=forms.TextInput(attrs={'placeholder': 'Last name','class' : 'myfield'}),required=True)
+    email = forms.EmailField(label='',widget=forms.EmailInput(attrs={'placeholder': 'Email', 'class' : 'myfield'}),required=True)
+    password1 = forms.CharField(label='', widget=forms.PasswordInput(attrs={'placeholder': 'Password','class' : 'myfield'}),required=True)
+    password2 = forms.CharField(label='', widget=forms.PasswordInput(attrs={'placeholder': 'Confirm password','class' : 'myfield'}))
+    newsletter = forms.BooleanField(required=False,label="I'd like to receive PlacePass news and offers",
+                                    widget=forms.CheckboxInput(attrs={'checked':''}))
 
     class Meta:
-        model = User
-        fields = ('first_name','last_name','email')
+        model = MyUser
+        fields = ('first_name','last_name','email','password1','password2','newsletter')
+
+
 

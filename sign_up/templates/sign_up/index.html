@@ -1,5 +1,29 @@
 {% extends "sign_up/base.html" %}
+{% load staticfiles %}
 {% block content %}
-<p>Learning Log helps you keep track of your learning, for any topic you're
-learning about.</p>
-lear
+
+<body>
+ <div class="page">
+   {% if user.is_authenticated %}
+     <h2>Hello, {{ user.first_name }}.
+     </h2>
+     <a href="{% url 'sign_up:logout'%}" ><p class='string'>Log out</p></a>
+   {% else %}
+     <h2>Hello, friend.</h2>
+     <a href="{% url 'sign_up:login' %}"><p class='string'>Log in</p></a>
+     <a href="{% url 'sign_up:register' %}"><p class='string'>Sign in</p></a>
+   {% endif %}
+   <p>Welcome to the test site.<br>
+      I hope it meets your requirements
+   </p>
+
+   <div class="footer">
+     Best regards.<br>
+     Perovsky Ivan. <br>
+     +7(931)297-22-06<br>
+     ivanperovsky@gmail.com
+   </div>
+ </div>
+</body>
+
+{% endblock content %}

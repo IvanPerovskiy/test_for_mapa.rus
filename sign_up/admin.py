@@ -1,6 +1,5 @@
 from django.contrib import admin
 
-from sign_up.models import Topic, Entry
+from sign_up.models import MyUser
 
-admin.site.register(Topic)
-admin.site.register(Entry)
+admin.site.register(MyUser)

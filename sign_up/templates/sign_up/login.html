@@ -1,12 +1,33 @@
-
+{% extends "sign_up/base.html" %}
+{% load staticfiles %}
 {% block content %}
-{% if form.errors %}
-<p>Your username and password didn't match. Please try again.</p>
-{% endif %}
-<form method="post" action="{% url 'sign_up:login' %}">
-{% csrf_token %}
-{{ form.as_p }}
-<button name="submit">log in</button>
-<input type="hidden" name="next" value="{% url 'sign_up:index' %}" />
-</form>
+<body>
+    <div class="page">
+        <a class = "social" href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}" >
+        <img class = 'icon' src="{% static 'images/facebook.png' %}" width="10%">
+        <p class='string'>Facebook</p></a>
+        <span>\</span>
+        <a  class = "social" href="{% url 'social:begin' 'google-oauth' %}">
+        <img class = 'icon' src="{% static 'images/google.jpg' %}" width="10%">
+        <p class = 'string'>Google</p></a>
+        <p class = "title"><span>or</span></p>
+        {% if form.errors %}
+        <p>Your username and password didn't match.<br>
+            Please try again.</p>
+        {% endif %}
+        <form method="post" action="{% url 'sign_up:login' %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button name="submit" class = "register">log in</button>
+            <input type="hidden" name="next" value="{% url 'sign_up:index' %}" />
+        </form>
+
+        <div class="footer">
+            Best regards.<br>
+            Perovsky Ivan. <br>
+            +7(931)297-22-06<br>
+            ivanperovsky@gmail.com
+        </div>
+    </div>
+</body>
 {% endblock content %}

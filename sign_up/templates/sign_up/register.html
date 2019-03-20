@@ -1,27 +1,33 @@
+{% extends "sign_up/base.html" %}
 {% load staticfiles %}
 {% block content %}
-<head>
-    <meta charset="utf-8">
-    <title>CSS-правила</title>
-    <link rel="stylesheet" type="text/css" href="style.css" >
-    <style>
-      body{ background: url({% static "sign_up/back.png" %});
-            background-size: 100%;}
-    </style>
-  </head>
 <body>
-    <div>
+    <div class="page">
+        <h2>SIGN UP WITH</h2>
+        <a class = "social" href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}" >
+        <img class = 'icon' src="{% static 'images/facebook.png' %}" width="10%">
+        <p class='string'>Facebook</p></a>
+        <span>\</span>
+        <a  class = "social" href="{% url 'social:begin' 'google-oauth' %}">
+        <img class = 'icon' src="{% static 'images/google.jpg' %}" width="10%">
+        <p class = 'string'>Google</p></a>
+        <p class = "title"><span>or</span></p>
         <form method="post" action="{% url 'sign_up:register' %}">
-            <h1>SIGN UP WITH</h1>
             {% csrf_token %}
             {{ form.as_p }}
-                <p> By signing up, I agree to the PlacePass Terms of Service and Privace Policy</p>
-            <button name="submit">REGISTER</button>
+            <p class = "comment"> By signing up, I agree to the PlacePass
+                <a  href="{% url 'sign_up:terms' %}" ><span class = "selected_part">Terms of Service </span> </a>
+                and
+                <a  href="{% url 'sign_up:policy' %}" ><span class = "selected_part">Privace Policy</span></a>
+            </p>
+            <button name="submit" class = "register" >REGISTER</button>
             <input type="hidden" name="next" value="{% url 'sign_up:index' %}" />
-            <p>Already have an account?</p>
-            <button name="submit">LOG IN</button>
-            <input type="hidden" name="next" value="{% url 'sign_up:login' %}" />
         </form>
+
+        <div>
+            <span class = "question">Already have an account?</span>
+            <a  class= "button" href="{% url 'sign_up:login' %}" ><span class='text_button'>LOG IN</span></a>
+        </div>
     </div>
 </body>
 {% endblock content %}
