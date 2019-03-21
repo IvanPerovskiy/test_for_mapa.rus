@@ -17,15 +17,6 @@ import pymysql
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
-#STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
-
-#STATIC_URL = '/static/'
-
-'''STATICFILES_DIRS = (
-
-    os.path.join(PROJECT_ROOT, 'static'),
-
-)'''
 STATIC_ROOT = 'static'
 STATIC_URL = '/static/'
 
@@ -118,13 +109,9 @@ else:
     # See https://cloud.google.com/sql/docs/mysql-connect-proxy
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'HOST': '127.0.0.1',
-            'PORT': '3306',
-            'NAME': 'mapa',
-            'USER': 'ivanperovsky',
-            'PASSWORD': 'gjnhbcdfc',
-        }
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
     }
 # [END db_setup]
 
@@ -132,7 +119,8 @@ else:
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
 AUTH_USER_MODEL = 'sign_up.MyUser'
-LOGIN_URL = '/users/login/'
+
+
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -161,10 +149,19 @@ AUTHENTICATION_BACKENDS = (
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
 
 SOCIAL_AUTH_FACEBOOK_KEY = '1118350805003288'
-SOCIAL_AUTH_FACEBOOK_SECRET = '●●●●●●●●'
+SOCIAL_AUTH_FACEBOOK_SECRET = '3e48a862ab88123daebf7845671dd57b'
+SOCIAL_AUTH_FACEBOOK_APP_NAMESPACE = 'testtaskformapa'
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
+SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS  =  {
+  'locale' :  'ru_RU' ,
+  'fields' :  'id, name, email'
+}
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '248916649448-9b77gj84rtlj9ngrn3hs7512p38dm0dg.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'gHlovloeWzgnDgob8EchxbDy'
 
-SOCIAL_AUTH_GOOGLE_OAUTH_KEY = '248916649448-9b77gj84rtlj9ngrn3hs7512p38dm0dg.apps.googleusercontent.com'
-SOCIAL_AUTH_GOOGLE_OAUTH_SECRET = 'gHlovloeWzgnDgob8EchxbDy'
+
+LOGIN_URL = '/sign_up/'
+LOGIN_REDIRECT_URL = '/sign_up/'
 
 LANGUAGE_CODE = 'en-us'
 

@@ -22,6 +22,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^sign_up/', include('sign_up.urls', namespace='sign_up')),
-    url('', include('social.apps.django_app.urls', namespace='social')),
+
+    url(r'^sign_up/', include('sign_up.urls', namespace='sign_up'), name="main"),
+    url(r'^auth/', include('social_django.urls', namespace='social')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

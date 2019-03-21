@@ -3,11 +3,11 @@
 {% block content %}
 <body>
     <div class="page">
-        <a class = "social" href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}" >
+        <a class = "social" href="{% url 'social:begin' 'facebook' %}" >
         <img class = 'icon' src="{% static 'images/facebook.png' %}" width="10%">
         <p class='string'>Facebook</p></a>
         <span>\</span>
-        <a  class = "social" href="{% url 'social:begin' 'google-oauth' %}">
+        <a  class = "social" href="{% url 'social:begin' 'google-oauth2' %}">
         <img class = 'icon' src="{% static 'images/google.jpg' %}" width="10%">
         <p class = 'string'>Google</p></a>
         <p class = "title"><span>or</span></p>
